@@ -1,30 +1,32 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your code from the repository
-                git url: 'https://github.com/bvithusan1999/PicVista.git', branch: 'main'
+                checkout scm
             }
         }
-        
-        stage('Build and Run React App') {
+
+      
+
+        stage('Deploy') {
             steps {
                 script {
-                    // Build and run only the react-app service using the new compose file
-                    sh 'docker-compose -f docker-compose.frontend.yml up -d react-app'
+                   
+                    bat 'docker-compose up --build -d'
                 }
             }
         }
     }
-    
+
     post {
-        always {
-            // Clean up
-            script {
-                sh 'docker-compose -f docker-compose.frontend.yml down'
-            }
+
+        success {
+            echo 'Build and deployment successful!'
+        }
+        failure {
+            echo 'Build or deployment failed!'
         }
     }
 }
