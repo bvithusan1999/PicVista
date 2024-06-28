@@ -4,7 +4,7 @@ services:
     build: ./client # Path to your react app Dockerfile
     stdin_open: true
     ports:
-      - "3000:3000"
+      - "3001:3000" # Change the host port to 3001
     networks:
       - mern-app
 
