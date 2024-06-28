@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your code from the repository
-                git 'https://your-repo-url.git'
+                git 'https://github.com/bvithusan1999/PicVista.git', branch: 'main'
             }
         }
         
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Build and run only the react-app service using the new compose file
-                    sh 'docker-compose -f docker-compose.frontend.yml up -d react-app'
+                    sh 'docker-compose -f docker-compose.yml up -d react-app'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
         always {
             // Clean up
             script {
-                sh 'docker-compose -f docker-compose.frontend.yml down'
+                sh 'docker-compose -f docker-compose.yml down'
             }
         }
     }
