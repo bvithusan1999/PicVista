@@ -13,8 +13,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
 
   backend:
-    build: ./backend
-    container_name: backend
+    build: ./server
+    container_name: server
     networks:
       - mern-net
     ports:
@@ -25,8 +25,8 @@ services:
       - MONGO_URI=mongodb://root:root@mongo:27017/mern-app?authSource=admin
 
   frontend:
-    build: ./frontend
-    container_name: frontend
+    build: ./client
+    container_name: client
     networks:
       - mern-net
     ports:
