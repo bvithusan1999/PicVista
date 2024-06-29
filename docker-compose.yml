@@ -1,13 +1,41 @@
-version: '3'
+version: '3.8'
+
 services:
-  react-app:
-    build: ./client # Path to your react app Dockerfile
-    stdin_open: true
-    ports:
-      - "3001:3000" # Change the host port to 3001
+  mongo:
+    image: mongo:latest
+    container_name: mongo
     networks:
-      - mern-app
+      - mern-net
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  backend:
+    build: ./backend
+    container_name: backend
+    networks:
+      - mern-net
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://root:root@mongo:27017/mern-app?authSource=admin
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    networks:
+      - mern-net
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_PUBLIC_FOLDERI=http://localhost:5000/images/
 
 networks:
-  mern-app:
+  mern-net:
     driver: bridge

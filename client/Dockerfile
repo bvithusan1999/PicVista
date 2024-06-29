@@ -1,26 +1,22 @@
-# Use an official node image as the base image
-FROM node:14
+# Use the official Node.js 18 image based on Alpine Linux
+FROM node:18-alpine
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json to leverage Docker cache
+COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the application code
 COPY . .
 
-# Build the React application for production
-RUN npm run build
+ENV REACT_APP_PUBLIC_FOLDER = http://localhost:5000/images/
 
-# Install a simple HTTP server to serve the static files
-RUN npm install -g serve
-
-# Set the command to serve the build directory
-CMD ["serve", "-s", "build"]
-
-# Expose the port the app runs on
+# Expose port 3000
 EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]
